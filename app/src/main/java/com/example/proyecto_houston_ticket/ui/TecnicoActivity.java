@@ -9,7 +9,11 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.proyecto_houston_ticket.R;
+import com.example.proyecto_houston_ticket.servicio.AuthService;
 
+/**
+ * Pantalla principal del rol TECNICO (Esqueleto Sprint 1).
+ */
 public class TecnicoActivity extends AppCompatActivity {
 
     @Override
@@ -17,18 +21,22 @@ public class TecnicoActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tecnico);
 
-        SharedPreferences prefs = getSharedPreferences("HoustonPrefs", MODE_PRIVATE);
-        String nombre = prefs.getString("user_nombre", "Usuario");
+        SharedPreferences prefs = getSharedPreferences("HoustonSession", MODE_PRIVATE);
+        String nombre = prefs.getString("user_name", "Técnico");
+        String rol = prefs.getString("user_role", "TECNICO");
 
         TextView tvBienvenida = findViewById(R.id.tvBienvenidaTecnico);
-        tvBienvenida.setText("Bienvenido, " + nombre + " (TECNICO)");
+        tvBienvenida.setText(getString(R.string.welcome_message, nombre, rol));
 
         Button btnCerrarSesion = findViewById(R.id.btnCerrarSesionTecnico);
         btnCerrarSesion.setOnClickListener(v -> {
-            prefs.edit().clear().apply();
+            AuthService authService = new AuthService(TecnicoActivity.this);
+            authService.cerrarSesion();
+
             Intent intent = new Intent(TecnicoActivity.this, LoginActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(intent);
+            finish();
         });
     }
 }

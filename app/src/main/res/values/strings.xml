@@ -1,3 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Cadenas de texto internacionalizadas de la aplicación -->
 <resources>
-    <string name="app_name">Proyecto_Houston_ticket</string>
+    <string name="app_name">Houston, tenemos un ticket</string>
+    <string name="app_subtitle">Proyecto 2º DAM - Gestión de Incidencias</string>
+
+    <!-- Botones principales -->
+    <string name="btn_login">Iniciar Sesión</string>
+    <string name="btn_register">Registrarse</string>
+    <string name="btn_logout">Cerrar sesión</string>
+
+    <!-- Etiquetas de campos -->
+    <string name="label_nombre">Nombre completo</string>
+    <string name="label_correo">Correo electrónico</string>
+    <string name="label_password">Contraseña</string>
+    <string name="label_repetir_password">Repetir contraseña</string>
+
+    <!-- Enlaces de navegación entre pantallas -->
+    <string name="link_to_register">¿No tienes cuenta? Regístrate</string>
+    <string name="link_to_login">¿Ya tengo cuenta? Inicia sesión</string>
+
+    <!-- Títulos de paneles -->
+    <string name="title_panel_cliente">Panel de Cliente</string>
+    <string name="title_panel_tecnico">Panel de Técnico</string>
+    <string name="title_panel_admin">Panel de Administrador</string>
+    <string name="title_registro">Registro de Usuario</string>
+
+    <!-- Plantillas de bienvenida -->
+    <string name="welcome_message">Bienvenido, %1$s (%2$s)</string>
+
+    <!-- Mensajes de validación y errores -->
+    <string name="error_email_invalid">Formato de correo electrónico no válido.</string>
+    <string name="error_password_length">La contraseña debe tener al menos 6 caracteres.</string>
+    <string name="error_password_mismatch">Las contraseñas no coinciden.</string>
+    <string name="error_email_exists">El correo electrónico ya está registrado.</string>
+    <string name="error_invalid_credentials">Correo o contraseña incorrectos.</string>
+    <string name="error_account_inactive">Cuenta desactivada. Contacta con el administrador.</string>
+    <string name="error_fields_required">Por favor, rellena todos los campos obligatorios.</string>
+    <string name="success_registration">Cuenta creada con éxito. Ya puedes iniciar sesión.</string>
 </resources>

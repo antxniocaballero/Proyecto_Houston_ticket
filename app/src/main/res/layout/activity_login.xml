@@ -1,62 +1,70 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- Pantalla de Inicio de Sesion de la app -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:gravity="center"
-    android:background="#F4F6F8"
+    android:background="@color/bg_light"
     android:padding="24dp">
 
+    <!-- Tarjeta contenedora blanca -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:background="@android:color/white"
-        android:padding="24dp"
-        android:elevation="4dp"
-        android:backgroundTint="@android:color/white">
+        android:background="@color/card_white"
+        android:padding="28dp"
+        android:elevation="4dp">
 
+        <!-- Logotipo o Titulo principal -->
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Houston, tenemos un ticket"
-            android:textColor="#1F5FAD"
+            android:text="@string/app_name"
+            android:textColor="@color/primary"
             android:textSize="22sp"
             android:textStyle="bold"
             android:gravity="center"
             android:layout_marginBottom="24dp" />
 
+        <!-- Bloque de error general -->
         <TextView
             android:id="@+id/tvErrorLogin"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="#B3261E"
+            android:textColor="@color/error_red"
             android:textSize="14sp"
             android:visibility="gone"
             android:layout_marginBottom="12dp"
             android:gravity="center" />
 
+        <!-- Campo Correo -->
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Correo electrónico"
+            android:text="@string/label_correo"
+            android:textColor="@color/text_main"
             android:textSize="14sp"
             android:textStyle="bold"
             android:layout_marginBottom="6dp" />
 
         <EditText
-            android:id="@+id/etEmailLogin"
+            android:id="@+id/etCorreoLogin"
             android:layout_width="match_parent"
             android:layout_height="44dp"
             android:inputType="textEmailAddress"
+            android:hint="correo@gmail.com"
             android:background="@android:drawable/edit_text"
             android:paddingHorizontal="12dp"
             android:layout_marginBottom="16dp" />
 
+        <!-- Campo Contrasena -->
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Contraseña"
+            android:text="@string/label_password"
+            android:textColor="@color/text_main"
             android:textSize="14sp"
             android:textStyle="bold"
             android:layout_marginBottom="6dp" />
@@ -70,21 +78,23 @@
             android:paddingHorizontal="12dp"
             android:layout_marginBottom="24dp" />
 
+        <!-- Boton Iniciar Sesion -->
         <Button
             android:id="@+id/btnLogin"
             android:layout_width="match_parent"
             android:layout_height="44dp"
-            android:text="Entrar"
-            android:backgroundTint="#1F5FAD"
-            android:textColor="@android:color/white"
+            android:text="@string/btn_login"
+            android:backgroundTint="@color/primary"
+            android:textColor="@color/card_white"
             android:layout_marginBottom="16dp" />
 
+        <!-- Enlace hacia Registro -->
         <TextView
             android:id="@+id/tvGoToRegistro"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="¿No tienes cuenta? Regístrate"
-            android:textColor="#1F5FAD"
+            android:text="@string/link_to_register"
+            android:textColor="@color/primary"
             android:gravity="center"
             android:textSize="14sp" />
 

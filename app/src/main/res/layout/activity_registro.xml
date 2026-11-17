@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- Pantalla de Registro de Usuario -->
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fillViewport="true"
-    android:background="#F4F6F8">
+    android:background="@color/bg_light">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -12,42 +13,34 @@
         android:gravity="center"
         android:padding="24dp">
 
+        <!-- Tarjeta contenedora -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:background="@android:color/white"
-            android:padding="24dp"
-            android:elevation="4dp"
-            android:backgroundTint="@android:color/white">
+            android:background="@color/card_white"
+            android:padding="28dp"
+            android:elevation="4dp">
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Registro de Usuario"
-                android:textColor="#1F5FAD"
+                android:text="@string/title_registro"
+                android:textColor="@color/primary"
                 android:textSize="22sp"
                 android:textStyle="bold"
                 android:gravity="center"
                 android:layout_marginBottom="24dp" />
 
-            <TextView
-                android:id="@+id/tvErrorRegistro"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="#B3261E"
-                android:textSize="14sp"
-                android:visibility="gone"
-                android:layout_marginBottom="12dp"
-                android:gravity="center" />
-
+            <!-- Campo Nombre -->
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Nombre completo"
+                android:text="@string/label_nombre"
+                android:textColor="@color/text_main"
                 android:textSize="14sp"
                 android:textStyle="bold"
-                android:layout_marginBottom="6dp" />
+                android:layout_marginBottom="4dp" />
 
             <EditText
                 android:id="@+id/etNombreRegistro"
@@ -56,32 +49,54 @@
                 android:inputType="textPersonName"
                 android:background="@android:drawable/edit_text"
                 android:paddingHorizontal="12dp"
-                android:layout_marginBottom="16dp" />
+                android:layout_marginBottom="2dp" />
 
+            <TextView
+                android:id="@+id/tvErrorNombre"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/error_red"
+                android:textSize="12sp"
+                android:visibility="gone"
+                android:layout_marginBottom="12dp" />
+
+            <!-- Campo Correo -->
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Correo electrónico"
+                android:text="@string/label_correo"
+                android:textColor="@color/text_main"
                 android:textSize="14sp"
                 android:textStyle="bold"
-                android:layout_marginBottom="6dp" />
+                android:layout_marginBottom="4dp" />
 
             <EditText
-                android:id="@+id/etEmailRegistro"
+                android:id="@+id/etCorreoRegistro"
                 android:layout_width="match_parent"
                 android:layout_height="44dp"
                 android:inputType="textEmailAddress"
                 android:background="@android:drawable/edit_text"
                 android:paddingHorizontal="12dp"
-                android:layout_marginBottom="16dp" />
+                android:layout_marginBottom="2dp" />
 
+            <TextView
+                android:id="@+id/tvErrorCorreo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/error_red"
+                android:textSize="12sp"
+                android:visibility="gone"
+                android:layout_marginBottom="12dp" />
+
+            <!-- Campo Contrasena -->
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Contraseña"
+                android:text="@string/label_password"
+                android:textColor="@color/text_main"
                 android:textSize="14sp"
                 android:textStyle="bold"
-                android:layout_marginBottom="6dp" />
+                android:layout_marginBottom="4dp" />
 
             <EditText
                 android:id="@+id/etPasswordRegistro"
@@ -90,15 +105,26 @@
                 android:inputType="textPassword"
                 android:background="@android:drawable/edit_text"
                 android:paddingHorizontal="12dp"
-                android:layout_marginBottom="16dp" />
+                android:layout_marginBottom="2dp" />
 
+            <TextView
+                android:id="@+id/tvErrorPassword"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/error_red"
+                android:textSize="12sp"
+                android:visibility="gone"
+                android:layout_marginBottom="12dp" />
+
+            <!-- Campo Repetir Contrasena -->
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Repetir contraseña"
+                android:text="@string/label_repetir_password"
+                android:textColor="@color/text_main"
                 android:textSize="14sp"
                 android:textStyle="bold"
-                android:layout_marginBottom="6dp" />
+                android:layout_marginBottom="4dp" />
 
             <EditText
                 android:id="@+id/etRepetirPasswordRegistro"
@@ -107,23 +133,34 @@
                 android:inputType="textPassword"
                 android:background="@android:drawable/edit_text"
                 android:paddingHorizontal="12dp"
-                android:layout_marginBottom="24dp" />
+                android:layout_marginBottom="2dp" />
 
+            <TextView
+                android:id="@+id/tvErrorRepetirPassword"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/error_red"
+                android:textSize="12sp"
+                android:visibility="gone"
+                android:layout_marginBottom="16dp" />
+
+            <!-- Boton Registrar -->
             <Button
                 android:id="@+id/btnRegistrar"
                 android:layout_width="match_parent"
                 android:layout_height="44dp"
-                android:text="Registrarse"
-                android:backgroundTint="#1F5FAD"
-                android:textColor="@android:color/white"
+                android:text="@string/btn_register"
+                android:backgroundTint="@color/primary"
+                android:textColor="@color/card_white"
                 android:layout_marginBottom="16dp" />
 
+            <!-- Enlace Volver a Login -->
             <TextView
                 android:id="@+id/tvGoToLogin"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="¿Ya tengo cuenta? Inicia sesión"
-                android:textColor="#1F5FAD"
+                android:text="@string/link_to_login"
+                android:textColor="@color/primary"
                 android:gravity="center"
                 android:textSize="14sp" />
 
