@@ -3,53 +3,180 @@ package com.example.proyecto_houston_ticket.data;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import com.example.proyecto_houston_ticket.modelo.Rol;
 import com.example.proyecto_houston_ticket.modelo.Usuario;
 
+/**
+ * Data Access Object (DAO) para la entidad Usuario.
+ * Proporciona métodos CRUD sobre la tabla 'usuarios' garantizando el cierre de cursores
+ * y el manejo adecuado de excepciones SQL.
+ */
 public class UsuarioDAO {
+
+    private static final String TAG = "UsuarioDAO";
     private final DatabaseHelper dbHelper;
 
     public UsuarioDAO(Context context) {
-        this.dbHelper = new DatabaseHelper(context);
+        if (context != null) {
+            this.dbHelper = new DatabaseHelper(context);
+        } else {
+            this.dbHelper = null;
+        }
     }
 
-    public Usuario buscarPorEmail(String email) {
-        SQLiteDatabase db = dbHelper.getReadableDatabase();
-        String[] columns = {"id_usuario", "nombre", "email", "password_hash", "id_rol", "activo", "fecha_registro"};
-        String selection = "email = ?";
-        String[] selectionArgs = {email};
+    /**
+     * Inserta un nuevo usuario en la base de datos.
+     *
+     * @param usuario Objeto Usuario con los datos a insertar.
+     * @return El ID del usuario insertado o -1 si ocurre un error.
+     */
+    public long insertar(Usuario usuario) {
+        if (dbHelper == null || usuario == null) return -1;
 
-        Cursor cursor = db.query("usuario", columns, selection, selectionArgs, null, null, null);
+        SQLiteDatabase db = null;
+        try {
+            db = dbHelper.getWritableDatabase();
+            ContentValues values = new ContentValues();
+            values.put("nombre", usuario.getNombre());
+            values.put("correo", usuario.getCorreo());
+            values.put("password_hash", usuario.getPasswordHash());
+            values.put("rol", usuario.getRol().name());
+            values.put("activo", usuario.isActivo() ? 1 : 0);
+
+            return db.insert("usuarios", null, values);
+        } catch (SQLException e) {
+            Log.e(TAG, "Error al insertar usuario: " + e.getMessage(), e);
+            return -1;
+        } finally {
+            if (db != null && db.isOpen()) {
+                db.close();
+            }
+        }
+    }
+
+    /**
+     * Busca un usuario registrado mediante su correo electrónico.
+     *
+     * @param correo Correo electrónico a buscar.
+     * @return Objeto Usuario o null si no existe.
+     */
+    public Usuario buscarPorCorreo(String correo) {
+        if (dbHelper == null || correo == null) return null;
+
+        SQLiteDatabase db = null;
+        Cursor cursor = null;
         Usuario usuario = null;
 
-        if (cursor != null && cursor.moveToFirst()) {
-            usuario = new Usuario();
-            usuario.setIdUsuario(cursor.getInt(cursor.getColumnIndexOrThrow("id_usuario")));
-            usuario.setNombre(cursor.getString(cursor.getColumnIndexOrThrow("nombre")));
-            usuario.setEmail(cursor.getString(cursor.getColumnIndexOrThrow("email")));
-            usuario.setPasswordHash(cursor.getString(cursor.getColumnIndexOrThrow("password_hash")));
-            usuario.setRol(Rol.fromId(cursor.getInt(cursor.getColumnIndexOrThrow("id_rol"))));
-            usuario.setActivo(cursor.getInt(cursor.getColumnIndexOrThrow("activo")) == 1);
-            usuario.setFechaRegistro(cursor.getString(cursor.getColumnIndexOrThrow("fecha_registro")));
-            cursor.close();
+        try {
+            db = dbHelper.getReadableDatabase();
+            String[] projection = {"id", "nombre", "correo", "password_hash", "rol", "activo"};
+            String selection = "correo = ?";
+            String[] selectionArgs = {correo.trim().toLowerCase()};
+
+            cursor = db.query("usuarios", projection, selection, selectionArgs, null, null, null);
+
+            if (cursor != null && cursor.moveToFirst()) {
+                usuario = mapearUsuario(cursor);
+            }
+        } catch (SQLException e) {
+            Log.e(TAG, "Error al buscar usuario por correo: " + e.getMessage(), e);
+        } finally {
+            if (cursor != null && !cursor.isClosed()) {
+                cursor.close();
+            }
+            if (db != null && db.isOpen()) {
+                db.close();
+            }
         }
-        db.close();
         return usuario;
     }
 
-    public boolean registrar(Usuario usuario) {
-        SQLiteDatabase db = dbHelper.getWritableDatabase();
-        ContentValues values = new ContentValues();
-        values.put("nombre", usuario.getNombre());
-        values.put("email", usuario.getEmail());
-        values.put("password_hash", usuario.getPasswordHash());
-        values.put("id_rol", usuario.getRol().getId());
-        values.put("activo", usuario.isActivo() ? 1 : 0);
+    /**
+     * Busca un usuario por su identificador único (ID).
+     *
+     * @param id Identificador en la BD.
+     * @return Objeto Usuario o null si no se encuentra.
+     */
+    public Usuario buscarPorId(long id) {
+        if (dbHelper == null) return null;
 
-        long result = db.insert("usuario", null, values);
-        db.close();
-        return result != -1;
+        SQLiteDatabase db = null;
+        Cursor cursor = null;
+        Usuario usuario = null;
+
+        try {
+            db = dbHelper.getReadableDatabase();
+            String[] projection = {"id", "nombre", "correo", "password_hash", "rol", "activo"};
+            String selection = "id = ?";
+            String[] selectionArgs = {String.valueOf(id)};
+
+            cursor = db.query("usuarios", projection, selection, selectionArgs, null, null, null);
+
+            if (cursor != null && cursor.moveToFirst()) {
+                usuario = mapearUsuario(cursor);
+            }
+        } catch (SQLException e) {
+            Log.e(TAG, "Error al buscar usuario por ID: " + e.getMessage(), e);
+        } finally {
+            if (cursor != null && !cursor.isClosed()) {
+                cursor.close();
+            }
+            if (db != null && db.isOpen()) {
+                db.close();
+            }
+        }
+        return usuario;
+    }
+
+    /**
+     * Comprueba si un correo electrónico ya está registrado en el sistema.
+     *
+     * @param correo Correo a consultar.
+     * @return true si el correo existe, false de lo contrario.
+     */
+    public boolean existeCorreo(String correo) {
+        if (dbHelper == null || correo == null) return false;
+
+        SQLiteDatabase db = null;
+        Cursor cursor = null;
+        boolean existe = false;
+
+        try {
+            db = dbHelper.getReadableDatabase();
+            String[] projection = {"id"};
+            String selection = "correo = ?";
+            String[] selectionArgs = {correo.trim().toLowerCase()};
+
+            cursor = db.query("usuarios", projection, selection, selectionArgs, null, null, null);
+            existe = (cursor != null && cursor.getCount() > 0);
+        } catch (SQLException e) {
+            Log.e(TAG, "Error al comprobar existencia de correo: " + e.getMessage(), e);
+        } finally {
+            if (cursor != null && !cursor.isClosed()) {
+                cursor.close();
+            }
+            if (db != null && db.isOpen()) {
+                db.close();
+            }
+        }
+        return existe;
+    }
+
+    /**
+     * Convierte una fila de Cursor en un objeto Usuario.
+     */
+    private Usuario mapearUsuario(Cursor cursor) {
+        long id = cursor.getLong(cursor.getColumnIndexOrThrow("id"));
+        String nombre = cursor.getString(cursor.getColumnIndexOrThrow("nombre"));
+        String correo = cursor.getString(cursor.getColumnIndexOrThrow("correo"));
+        String passwordHash = cursor.getString(cursor.getColumnIndexOrThrow("password_hash"));
+        String rolStr = cursor.getString(cursor.getColumnIndexOrThrow("rol"));
+        boolean activo = cursor.getInt(cursor.getColumnIndexOrThrow("activo")) == 1;
+
+        return new Usuario(id, nombre, correo, passwordHash, Rol.deCadena(rolStr), activo);
     }
 }

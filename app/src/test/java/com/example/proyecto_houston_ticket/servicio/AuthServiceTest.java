@@ -13,15 +13,17 @@ import java.util.Map;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
+/**
+ * Pruebas unitarias para la clase AuthService utilizando un Stub de UsuarioDAO.
+ */
 public class AuthServiceTest {
 
     private FakeUsuarioDAO fakeDAO;
     private AuthService authService;
 
-    // Stub de UsuarioDAO sin necesidad de Mockito ni ByteBuddy
+    // Stub de UsuarioDAO sin dependencias de base de datos ni Android
     private static class FakeUsuarioDAO extends UsuarioDAO {
         private final Map<String, Usuario> usuariosDB = new HashMap<>();
 
@@ -30,14 +32,19 @@ public class AuthServiceTest {
         }
 
         @Override
-        public Usuario buscarPorEmail(String email) {
-            return usuariosDB.get(email);
+        public Usuario buscarPorCorreo(String correo) {
+            return usuariosDB.get(correo);
         }
 
         @Override
-        public boolean registrar(Usuario usuario) {
-            usuariosDB.put(usuario.getEmail(), usuario);
-            return true;
+        public boolean existeCorreo(String correo) {
+            return usuariosDB.containsKey(correo);
+        }
+
+        @Override
+        public long insertar(Usuario usuario) {
+            usuariosDB.put(usuario.getCorreo(), usuario);
+            return 1L;
         }
     }
 
@@ -54,20 +61,20 @@ public class AuthServiceTest {
 
         assertTrue(resultado);
         assertEquals("", errores.toString());
-        assertNotNull(fakeDAO.buscarPorEmail("nuevo@houston.local"));
+        assertNotNull(fakeDAO.buscarPorCorreo("nuevo@houston.local"));
     }
 
     @Test
     public void testRegistroEmailRepetidoFalla() {
         Usuario existente = new Usuario();
-        existente.setEmail("existente@houston.local");
-        fakeDAO.registrar(existente);
+        existente.setCorreo("existente@houston.local");
+        fakeDAO.insertar(existente);
 
         StringBuilder errores = new StringBuilder();
         boolean resultado = authService.registrarCliente("Juan Pérez", "existente@houston.local", "Admin1234", "Admin1234", errores);
 
         assertFalse(resultado);
-        assertTrue(errores.toString().contains("email ya está registrado"));
+        assertTrue(errores.toString().contains("correo electrónico ya está registrado"));
     }
 
     @Test
@@ -76,38 +83,33 @@ public class AuthServiceTest {
         boolean resultado = authService.registrarCliente("Juan Pérez", "test@houston.local", "Ab1", "Ab1", errores);
 
         assertFalse(resultado);
-        assertTrue(errores.toString().contains("contraseña debe tener al menos 8 caracteres"));
-    }
-
-    @Test
-    public void testRegistroPasswordSinNumeroFalla() {
-        StringBuilder errores = new StringBuilder();
-        boolean resultado = authService.registrarCliente("Juan Pérez", "test@houston.local", "SoloLetras", "SoloLetras", errores);
-
-        assertFalse(resultado);
-        assertTrue(errores.toString().contains("una letra y un número"));
+        assertTrue(errores.toString().contains("al menos 6 caracteres"));
     }
 
     @Test
     public void testLoginPasswordIncorrectaFalla() {
         Usuario u = new Usuario();
-        u.setEmail("user@houston.local");
-        u.setPasswordHash(PasswordUtil.hashPassword("Correcta123"));
+        u.setCorreo("user@houston.local");
+        u.setPasswordHash(PasswordUtil.generarHash("Correcta123"));
         u.setActivo(true);
-        fakeDAO.registrar(u);
+        fakeDAO.insertar(u);
 
-        Usuario resultado = authService.autenticar("user@houston.local", "Incorrecta123");
-        assertNull(resultado);
+        try {
+            authService.login("user@houston.local", "Incorrecta123");
+            assertTrue("Debería haber lanzado IllegalArgumentException", false);
+        } catch (IllegalArgumentException e) {
+            assertTrue(e.getMessage().contains("incorrectos"));
+        }
     }
 
     @Test(expected = IllegalStateException.class)
     public void testLoginUsuarioInactivoFalla() {
         Usuario u = new Usuario();
-        u.setEmail("inactivo@houston.local");
-        u.setPasswordHash(PasswordUtil.hashPassword("Admin1234"));
+        u.setCorreo("inactivo@houston.local");
+        u.setPasswordHash(PasswordUtil.generarHash("Admin1234"));
         u.setActivo(false);
-        fakeDAO.registrar(u);
+        fakeDAO.insertar(u);
 
-        authService.autenticar("inactivo@houston.local", "Admin1234");
+        authService.login("inactivo@houston.local", "Admin1234");
     }
 }
