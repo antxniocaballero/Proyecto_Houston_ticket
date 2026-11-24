@@ -10,10 +10,11 @@ import android.util.Log;
 import com.example.proyecto_houston_ticket.modelo.Rol;
 import com.example.proyecto_houston_ticket.modelo.Usuario;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Data Access Object (DAO) para la entidad Usuario.
- * Proporciona métodos CRUD sobre la tabla 'usuarios' garantizando el cierre de cursores
- * y el manejo adecuado de excepciones SQL.
  */
 public class UsuarioDAO {
 
@@ -30,9 +31,6 @@ public class UsuarioDAO {
 
     /**
      * Inserta un nuevo usuario en la base de datos.
-     *
-     * @param usuario Objeto Usuario con los datos a insertar.
-     * @return El ID del usuario insertado o -1 si ocurre un error.
      */
     public long insertar(Usuario usuario) {
         if (dbHelper == null || usuario == null) return -1;
@@ -59,10 +57,7 @@ public class UsuarioDAO {
     }
 
     /**
-     * Busca un usuario registrado mediante su correo electrónico.
-     *
-     * @param correo Correo electrónico a buscar.
-     * @return Objeto Usuario o null si no existe.
+     * Busca un usuario por correo.
      */
     public Usuario buscarPorCorreo(String correo) {
         if (dbHelper == null || correo == null) return null;
@@ -96,10 +91,7 @@ public class UsuarioDAO {
     }
 
     /**
-     * Busca un usuario por su identificador único (ID).
-     *
-     * @param id Identificador en la BD.
-     * @return Objeto Usuario o null si no se encuentra.
+     * Busca un usuario por ID.
      */
     public Usuario buscarPorId(long id) {
         if (dbHelper == null) return null;
@@ -133,10 +125,7 @@ public class UsuarioDAO {
     }
 
     /**
-     * Comprueba si un correo electrónico ya está registrado en el sistema.
-     *
-     * @param correo Correo a consultar.
-     * @return true si el correo existe, false de lo contrario.
+     * Comprueba la existencia de un correo.
      */
     public boolean existeCorreo(String correo) {
         if (dbHelper == null || correo == null) return false;
@@ -167,8 +156,40 @@ public class UsuarioDAO {
     }
 
     /**
-     * Convierte una fila de Cursor en un objeto Usuario.
+     * Obtiene todos los usuarios que tienen rol TECNICO para asignación de tickets.
      */
+    public List<Usuario> obtenerTecnicos() {
+        List<Usuario> lista = new ArrayList<>();
+        if (dbHelper == null) return lista;
+
+        SQLiteDatabase db = null;
+        Cursor cursor = null;
+
+        try {
+            db = dbHelper.getReadableDatabase();
+            String selection = "rol = ? AND activo = 1";
+            String[] selectionArgs = {Rol.TECNICO.name()};
+
+            cursor = db.query("usuarios", null, selection, selectionArgs, null, null, "nombre ASC");
+
+            if (cursor != null && cursor.moveToFirst()) {
+                do {
+                    lista.add(mapearUsuario(cursor));
+                } while (cursor.moveToNext());
+            }
+        } catch (SQLException e) {
+            Log.e(TAG, "Error al obtener lista de técnicos: " + e.getMessage(), e);
+        } finally {
+            if (cursor != null && !cursor.isClosed()) {
+                cursor.close();
+            }
+            if (db != null && db.isOpen()) {
+                db.close();
+            }
+        }
+        return lista;
+    }
+
     private Usuario mapearUsuario(Cursor cursor) {
         long id = cursor.getLong(cursor.getColumnIndexOrThrow("id"));
         String nombre = cursor.getString(cursor.getColumnIndexOrThrow("nombre"));

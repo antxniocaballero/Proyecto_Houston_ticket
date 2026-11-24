@@ -1,169 +1,195 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Pantalla de Registro de Usuario -->
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fillViewport="true"
+    android:orientation="vertical"
     android:background="@color/bg_light">
 
-    <LinearLayout
+    <!-- Toolbar superior con boton de retroceso -->
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbarRegistro"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:gravity="center"
-        android:padding="24dp">
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/primary"
+        app:title="@string/title_registro"
+        app:titleTextColor="@color/card_white" />
 
-        <!-- Tarjeta contenedora -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:background="@color/card_white"
-            android:padding="28dp"
-            android:elevation="4dp">
+            android:gravity="center"
+            android:padding="24dp">
 
-            <TextView
+            <!-- Tarjeta contenedora -->
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/title_registro"
-                android:textColor="@color/primary"
-                android:textSize="22sp"
-                android:textStyle="bold"
-                android:gravity="center"
-                android:layout_marginBottom="24dp" />
+                android:orientation="vertical"
+                android:background="@color/card_white"
+                android:padding="28dp"
+                android:elevation="4dp">
 
-            <!-- Campo Nombre -->
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/label_nombre"
-                android:textColor="@color/text_main"
-                android:textSize="14sp"
-                android:textStyle="bold"
-                android:layout_marginBottom="4dp" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/title_registro"
+                    android:textColor="@color/primary"
+                    android:textSize="22sp"
+                    android:textStyle="bold"
+                    android:gravity="center"
+                    android:layout_marginBottom="24dp" />
 
-            <EditText
-                android:id="@+id/etNombreRegistro"
-                android:layout_width="match_parent"
-                android:layout_height="44dp"
-                android:inputType="textPersonName"
-                android:background="@android:drawable/edit_text"
-                android:paddingHorizontal="12dp"
-                android:layout_marginBottom="2dp" />
+                <!-- Campo Nombre -->
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/label_nombre"
+                    android:textColor="@color/text_main"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="4dp" />
 
-            <TextView
-                android:id="@+id/tvErrorNombre"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="@color/error_red"
-                android:textSize="12sp"
-                android:visibility="gone"
-                android:layout_marginBottom="12dp" />
+                <EditText
+                    android:id="@+id/etNombreRegistro"
+                    android:layout_width="match_parent"
+                    android:layout_height="44dp"
+                    android:inputType="textPersonName"
+                    android:background="@android:drawable/edit_text"
+                    android:paddingHorizontal="12dp"
+                    android:layout_marginBottom="2dp" />
 
-            <!-- Campo Correo -->
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/label_correo"
-                android:textColor="@color/text_main"
-                android:textSize="14sp"
-                android:textStyle="bold"
-                android:layout_marginBottom="4dp" />
+                <TextView
+                    android:id="@+id/tvErrorNombre"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/error_red"
+                    android:textSize="12sp"
+                    android:visibility="gone"
+                    android:layout_marginBottom="12dp" />
 
-            <EditText
-                android:id="@+id/etCorreoRegistro"
-                android:layout_width="match_parent"
-                android:layout_height="44dp"
-                android:inputType="textEmailAddress"
-                android:background="@android:drawable/edit_text"
-                android:paddingHorizontal="12dp"
-                android:layout_marginBottom="2dp" />
+                <!-- Campo Correo -->
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/label_correo"
+                    android:textColor="@color/text_main"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="4dp" />
 
-            <TextView
-                android:id="@+id/tvErrorCorreo"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="@color/error_red"
-                android:textSize="12sp"
-                android:visibility="gone"
-                android:layout_marginBottom="12dp" />
+                <EditText
+                    android:id="@+id/etCorreoRegistro"
+                    android:layout_width="match_parent"
+                    android:layout_height="44dp"
+                    android:inputType="textEmailAddress"
+                    android:background="@android:drawable/edit_text"
+                    android:paddingHorizontal="12dp"
+                    android:layout_marginBottom="2dp" />
 
-            <!-- Campo Contrasena -->
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/label_password"
-                android:textColor="@color/text_main"
-                android:textSize="14sp"
-                android:textStyle="bold"
-                android:layout_marginBottom="4dp" />
+                <TextView
+                    android:id="@+id/tvErrorCorreo"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/error_red"
+                    android:textSize="12sp"
+                    android:visibility="gone"
+                    android:layout_marginBottom="12dp" />
 
-            <EditText
-                android:id="@+id/etPasswordRegistro"
-                android:layout_width="match_parent"
-                android:layout_height="44dp"
-                android:inputType="textPassword"
-                android:background="@android:drawable/edit_text"
-                android:paddingHorizontal="12dp"
-                android:layout_marginBottom="2dp" />
+                <!-- Campo Contrasena -->
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/label_password"
+                    android:textColor="@color/text_main"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="4dp" />
 
-            <TextView
-                android:id="@+id/tvErrorPassword"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="@color/error_red"
-                android:textSize="12sp"
-                android:visibility="gone"
-                android:layout_marginBottom="12dp" />
+                <EditText
+                    android:id="@+id/etPasswordRegistro"
+                    android:layout_width="match_parent"
+                    android:layout_height="44dp"
+                    android:inputType="textPassword"
+                    android:background="@android:drawable/edit_text"
+                    android:paddingHorizontal="12dp"
+                    android:layout_marginBottom="2dp" />
 
-            <!-- Campo Repetir Contrasena -->
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/label_repetir_password"
-                android:textColor="@color/text_main"
-                android:textSize="14sp"
-                android:textStyle="bold"
-                android:layout_marginBottom="4dp" />
+                <TextView
+                    android:id="@+id/tvErrorPassword"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/error_red"
+                    android:textSize="12sp"
+                    android:visibility="gone"
+                    android:layout_marginBottom="12dp" />
 
-            <EditText
-                android:id="@+id/etRepetirPasswordRegistro"
-                android:layout_width="match_parent"
-                android:layout_height="44dp"
-                android:inputType="textPassword"
-                android:background="@android:drawable/edit_text"
-                android:paddingHorizontal="12dp"
-                android:layout_marginBottom="2dp" />
+                <!-- Campo Repetir Contrasena -->
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/label_repetir_password"
+                    android:textColor="@color/text_main"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="4dp" />
 
-            <TextView
-                android:id="@+id/tvErrorRepetirPassword"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="@color/error_red"
-                android:textSize="12sp"
-                android:visibility="gone"
-                android:layout_marginBottom="16dp" />
+                <EditText
+                    android:id="@+id/etRepetirPasswordRegistro"
+                    android:layout_width="match_parent"
+                    android:layout_height="44dp"
+                    android:inputType="textPassword"
+                    android:background="@android:drawable/edit_text"
+                    android:paddingHorizontal="12dp"
+                    android:layout_marginBottom="2dp" />
 
-            <!-- Boton Registrar -->
-            <Button
-                android:id="@+id/btnRegistrar"
-                android:layout_width="match_parent"
-                android:layout_height="44dp"
-                android:text="@string/btn_register"
-                android:backgroundTint="@color/primary"
-                android:textColor="@color/card_white"
-                android:layout_marginBottom="16dp" />
+                <TextView
+                    android:id="@+id/tvErrorRepetirPassword"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/error_red"
+                    android:textSize="12sp"
+                    android:visibility="gone"
+                    android:layout_marginBottom="16dp" />
 
-            <!-- Enlace Volver a Login -->
-            <TextView
-                android:id="@+id/tvGoToLogin"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/link_to_login"
-                android:textColor="@color/primary"
-                android:gravity="center"
-                android:textSize="14sp" />
+                <!-- Boton Registrar -->
+                <Button
+                    android:id="@+id/btnRegistrar"
+                    android:layout_width="match_parent"
+                    android:layout_height="44dp"
+                    android:text="@string/btn_register"
+                    android:backgroundTint="@color/primary"
+                    android:textColor="@color/card_white"
+                    android:layout_marginBottom="12dp" />
 
+                <!-- Boton Volver a Login -->
+                <Button
+                    android:id="@+id/btnVolverLogin"
+                    android:layout_width="match_parent"
+                    android:layout_height="44dp"
+                    android:text="Volver al Login"
+                    android:backgroundTint="@color/secondary"
+                    android:textColor="@color/card_white"
+                    android:layout_marginBottom="16dp" />
+
+                <!-- Enlace Volver a Login -->
+                <TextView
+                    android:id="@+id/tvGoToLogin"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/link_to_login"
+                    android:textColor="@color/primary"
+                    android:gravity="center"
+                    android:textSize="14sp" />
+
+            </LinearLayout>
         </LinearLayout>
-    </LinearLayout>
-</ScrollView>
+    </ScrollView>
+</LinearLayout>

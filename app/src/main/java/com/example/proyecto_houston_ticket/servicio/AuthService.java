@@ -140,7 +140,19 @@ public class AuthService {
     public boolean haySesionActiva() {
         if (context == null) return false;
         SharedPreferences prefs = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
-        return prefs.contains(KEY_USER_ID) && prefs.getLong(KEY_USER_ID, -1) != -1;
+        long userId = prefs.getLong(KEY_USER_ID, -1);
+        if (userId == -1) {
+            return false;
+        }
+
+        // Verificar que el usuario registrado en sesión aún existe físicamente en la BD
+        Usuario usuarioBD = usuarioDAO.buscarPorId(userId);
+        if (usuarioBD == null || !usuarioBD.isActivo()) {
+            cerrarSesion();
+            return false;
+        }
+
+        return true;
     }
 
     /**

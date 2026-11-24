@@ -10,6 +10,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import com.example.proyecto_houston_ticket.R;
 import com.example.proyecto_houston_ticket.servicio.AuthService;
@@ -19,8 +20,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 /**
- * Pantalla de registro público para nuevos usuarios (se les asigna el rol CLIENTE).
- * Realiza las operaciones de verificación e inserción en la BD en un hilo secundario.
+ * Pantalla de registro público para nuevos usuarios.
  */
 public class RegistroActivity extends AppCompatActivity {
 
@@ -35,6 +35,7 @@ public class RegistroActivity extends AppCompatActivity {
     private TextView tvErrorRepetirPassword;
 
     private Button btnRegistrar;
+    private Button btnVolverLogin;
     private TextView tvGoToLogin;
 
     private AuthService authService;
@@ -46,11 +47,18 @@ public class RegistroActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registro);
 
+        Toolbar toolbar = findViewById(R.id.toolbarRegistro);
+        if (toolbar != null) {
+            setSupportActionBar(toolbar);
+            if (getSupportActionBar() != null) {
+                getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            }
+        }
+
         authService = new AuthService(this);
         executorService = Executors.newSingleThreadExecutor();
         mainHandler = new Handler(Looper.getMainLooper());
 
-        // Referencias a los componentes de la interfaz
         etNombre = findViewById(R.id.etNombreRegistro);
         etCorreo = findViewById(R.id.etCorreoRegistro);
         etPassword = findViewById(R.id.etPasswordRegistro);
@@ -62,16 +70,20 @@ public class RegistroActivity extends AppCompatActivity {
         tvErrorRepetirPassword = findViewById(R.id.tvErrorRepetirPassword);
 
         btnRegistrar = findViewById(R.id.btnRegistrar);
+        btnVolverLogin = findViewById(R.id.btnVolverLogin);
         tvGoToLogin = findViewById(R.id.tvGoToLogin);
 
-        // Eventos
         btnRegistrar.setOnClickListener(v -> intentarRegistro());
+        btnVolverLogin.setOnClickListener(v -> finish());
         tvGoToLogin.setOnClickListener(v -> finish());
     }
 
-    /**
-     * Valida los campos en el hilo principal y ejecuta la inserción en la BD en hilo secundario.
-     */
+    @Override
+    public boolean onSupportNavigateUp() {
+        finish();
+        return true;
+    }
+
     private void intentarRegistro() {
         limpiarErrores();
 
@@ -112,7 +124,6 @@ public class RegistroActivity extends AppCompatActivity {
 
         btnRegistrar.setEnabled(false);
 
-        // Operación de base de datos en segundo hilo
         executorService.execute(() -> {
             StringBuilder errorOut = new StringBuilder();
             boolean exito = authService.registrarCliente(nombre, correo, password, repetirPassword, errorOut);
@@ -121,7 +132,7 @@ public class RegistroActivity extends AppCompatActivity {
                 btnRegistrar.setEnabled(true);
                 if (exito) {
                     Toast.makeText(RegistroActivity.this, R.string.success_registration, Toast.LENGTH_LONG).show();
-                    finish(); // Volver al Login
+                    finish();
                 } else {
                     tvErrorCorreo.setText(errorOut.toString());
                     tvErrorCorreo.setVisibility(View.VISIBLE);

@@ -8,29 +8,23 @@ import com.example.proyecto_houston_ticket.util.PasswordUtil;
 
 /**
  * Administrador de la base de datos SQLite para la aplicación "Houston, tenemos un ticket".
- * Maneja la creación de tablas, claves foráneas e inserción de datos iniciales de prueba.
+ * Maneja la creación de tablas (usuarios, tickets, comentarios), claves foráneas e inserción de datos iniciales.
  */
 public class DatabaseHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "houston_ticket.db";
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
 
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
-    /**
-     * Activa el soporte de claves foráneas en SQLite (PRAGMA foreign_keys = ON).
-     */
     @Override
     public void onConfigure(SQLiteDatabase db) {
         super.onConfigure(db);
         db.setForeignKeyConstraintsEnabled(true);
     }
 
-    /**
-     * Crea la estructura de tablas e inserta los datos semilla iniciales.
-     */
     @Override
     public void onCreate(SQLiteDatabase db) {
         // 1. Tabla de Usuarios
@@ -60,10 +54,24 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 "FOREIGN KEY (tecnico_id) REFERENCES usuarios(id) ON DELETE SET NULL" +
                 ");";
 
+        // 3. Tabla de Comentarios
+        String SQL_CREATE_TABLA_COMENTARIOS = "CREATE TABLE comentarios (" +
+                "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                "ticket_id INTEGER NOT NULL, " +
+                "usuario_id INTEGER NOT NULL, " +
+                "autor_nombre TEXT NOT NULL, " +
+                "rol_autor TEXT NOT NULL, " +
+                "mensaje TEXT NOT NULL, " +
+                "fecha_creacion TEXT DEFAULT CURRENT_TIMESTAMP, " +
+                "FOREIGN KEY (ticket_id) REFERENCES tickets(id) ON DELETE CASCADE, " +
+                "FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE" +
+                ");";
+
         db.execSQL(SQL_CREATE_TABLA_USUARIOS);
         db.execSQL(SQL_CREATE_TABLA_TICKETS);
+        db.execSQL(SQL_CREATE_TABLA_COMENTARIOS);
 
-        // 3. Inserción de datos iniciales de prueba (Usuarios con hashes SHA-256 con sal)
+        // 4. Inserción de usuarios iniciales
         String passClienteHash = PasswordUtil.generarHash("Cliente123");
         String passTecnicoHash = PasswordUtil.generarHash("Tecnico123");
         String passAdminHash = PasswordUtil.generarHash("Admin123");
@@ -77,19 +85,27 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL("INSERT INTO usuarios (nombre, correo, password_hash, rol, activo) VALUES " +
                 "('Ana Administradora', 'admin@houston.local', '" + passAdminHash + "', 'ADMIN', 1);");
 
-        // 4. Inserción de 3 tickets de prueba con distintos estados
+        // 5. Inserción de tickets de prueba
         db.execSQL("INSERT INTO tickets (titulo, descripcion, categoria, prioridad, estado, creado_por, tecnico_id) VALUES " +
                 "('Fallo en pantalla de inicio', 'La pantalla se queda congelada al iniciar sesión.', 'Software', 'Alta', 'ABIERTO', 1, NULL);");
 
         db.execSQL("INSERT INTO tickets (titulo, descripcion, categoria, prioridad, estado, creado_por, tecnico_id) VALUES " +
-                "('Teclado no responde', 'La tecla Enter dejó de funcionar tras la actualización.', 'Hardware', 'Media', 'EN_PROCESO', 1, 2);");
+                "('Teclado no responde', 'La tecla Enter dejó de funcionar tras la actualización.', 'Hardware', 'Media', 'EN_CURSO', 1, 2);");
 
         db.execSQL("INSERT INTO tickets (titulo, descripcion, categoria, prioridad, estado, creado_por, tecnico_id) VALUES " +
                 "('Restablecimiento de correo', 'Solicitud de reinicio de contraseña de correo corporativo.', 'Redes', 'Baja', 'RESUELTO', 1, 2);");
+
+        // 6. Inserción de comentarios iniciales
+        db.execSQL("INSERT INTO comentarios (ticket_id, usuario_id, autor_nombre, rol_autor, mensaje) VALUES " +
+                "(2, 2, 'Carlos Técnico', 'TECNICO', 'He comenzado a revisar el dispositivo en el taller.');");
+
+        db.execSQL("INSERT INTO comentarios (ticket_id, usuario_id, autor_nombre, rol_autor, mensaje) VALUES " +
+                "(2, 1, 'Juan Cliente', 'CLIENTE', 'Muchas gracias, quedo atento a cualquier novedad.');");
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        db.execSQL("DROP TABLE IF EXISTS comentarios;");
         db.execSQL("DROP TABLE IF EXISTS tickets;");
         db.execSQL("DROP TABLE IF EXISTS usuarios;");
         onCreate(db);

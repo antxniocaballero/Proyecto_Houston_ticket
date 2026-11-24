@@ -1,121 +1,137 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Layout para la creación de un nuevo ticket de incidencia -->
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fillViewport="true"
+    android:orientation="vertical"
     android:background="@color/bg_light">
 
-    <LinearLayout
+    <!-- Toolbar superior con boton de retroceso -->
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbarCrear"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="24dp">
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/primary"
+        app:title="Nueva Incidencia"
+        app:titleTextColor="@color/card_white" />
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Nueva Incidencia"
-            android:textColor="@color/primary"
-            android:textSize="22sp"
-            android:textStyle="bold"
-            android:gravity="center"
-            android:layout_marginBottom="24dp" />
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
 
-        <!-- Tarjeta de formulario -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:background="@color/card_white"
-            android:padding="20dp"
-            android:elevation="4dp">
+            android:padding="20dp">
 
-            <!-- Titulo del Ticket -->
-            <TextView
+            <!-- Tarjeta de formulario -->
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Título de la incidencia *"
-                android:textColor="@color/text_main"
-                android:textSize="14sp"
-                android:textStyle="bold"
-                android:layout_marginBottom="4dp" />
+                android:orientation="vertical"
+                android:background="@color/card_white"
+                android:padding="20dp"
+                android:elevation="4dp">
 
-            <EditText
-                android:id="@+id/etTituloTicket"
-                android:layout_width="match_parent"
-                android:layout_height="44dp"
-                android:hint="Ej: Error al acceder a la impresora"
-                android:inputType="textCapSentences"
-                android:background="@android:drawable/edit_text"
-                android:paddingHorizontal="12dp"
-                android:layout_marginBottom="16dp" />
+                <!-- Titulo del Ticket -->
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Título de la incidencia *"
+                    android:textColor="@color/text_main"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="4dp" />
 
-            <!-- Categoria -->
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Categoría *"
-                android:textColor="@color/text_main"
-                android:textSize="14sp"
-                android:textStyle="bold"
-                android:layout_marginBottom="4dp" />
+                <EditText
+                    android:id="@+id/etTituloTicket"
+                    android:layout_width="match_parent"
+                    android:layout_height="44dp"
+                    android:hint="Ej: Error al acceder a la impresora"
+                    android:inputType="textCapSentences"
+                    android:background="@android:drawable/edit_text"
+                    android:paddingHorizontal="12dp"
+                    android:layout_marginBottom="16dp" />
 
-            <Spinner
-                android:id="@+id/spinnerCategoria"
-                android:layout_width="match_parent"
-                android:layout_height="44dp"
-                android:background="@android:drawable/btn_dropdown"
-                android:layout_marginBottom="16dp" />
+                <!-- Categoria -->
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Categoría *"
+                    android:textColor="@color/text_main"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="4dp" />
 
-            <!-- Prioridad -->
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Prioridad *"
-                android:textColor="@color/text_main"
-                android:textSize="14sp"
-                android:textStyle="bold"
-                android:layout_marginBottom="4dp" />
+                <Spinner
+                    android:id="@+id/spinnerCategoria"
+                    android:layout_width="match_parent"
+                    android:layout_height="44dp"
+                    android:background="@android:drawable/btn_dropdown"
+                    android:layout_marginBottom="16dp" />
 
-            <Spinner
-                android:id="@+id/spinnerPrioridad"
-                android:layout_width="match_parent"
-                android:layout_height="44dp"
-                android:background="@android:drawable/btn_dropdown"
-                android:layout_marginBottom="16dp" />
+                <!-- Prioridad -->
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Prioridad *"
+                    android:textColor="@color/text_main"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="4dp" />
 
-            <!-- Descripcion -->
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Descripción detallada *"
-                android:textColor="@color/text_main"
-                android:textSize="14sp"
-                android:textStyle="bold"
-                android:layout_marginBottom="4dp" />
+                <Spinner
+                    android:id="@+id/spinnerPrioridad"
+                    android:layout_width="match_parent"
+                    android:layout_height="44dp"
+                    android:background="@android:drawable/btn_dropdown"
+                    android:layout_marginBottom="16dp" />
 
-            <EditText
-                android:id="@+id/etDescripcionTicket"
-                android:layout_width="match_parent"
-                android:layout_height="120dp"
-                android:hint="Explica con detalle el problema encontrado..."
-                android:inputType="textMultiLine"
-                android:gravity="top|start"
-                android:background="@android:drawable/edit_text"
-                android:padding="12dp"
-                android:layout_marginBottom="24dp" />
+                <!-- Descripcion -->
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Descripción detallada *"
+                    android:textColor="@color/text_main"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="4dp" />
 
-            <!-- Boton Guardar -->
-            <Button
-                android:id="@+id/btnGuardarTicket"
-                android:layout_width="match_parent"
-                android:layout_height="44dp"
-                android:text="Crear Ticket"
-                android:backgroundTint="@color/primary"
-                android:textColor="@color/card_white" />
+                <EditText
+                    android:id="@+id/etDescripcionTicket"
+                    android:layout_width="match_parent"
+                    android:layout_height="120dp"
+                    android:hint="Explica con detalle el problema encontrado..."
+                    android:inputType="textMultiLine"
+                    android:gravity="top|start"
+                    android:background="@android:drawable/edit_text"
+                    android:padding="12dp"
+                    android:layout_marginBottom="24dp" />
+
+                <!-- Boton Guardar -->
+                <Button
+                    android:id="@+id/btnGuardarTicket"
+                    android:layout_width="match_parent"
+                    android:layout_height="44dp"
+                    android:text="Crear Ticket"
+                    android:backgroundTint="@color/primary"
+                    android:textColor="@color/card_white"
+                    android:layout_marginBottom="12dp" />
+
+                <!-- Boton Volver / Cancelar -->
+                <Button
+                    android:id="@+id/btnCancelarCrear"
+                    android:layout_width="match_parent"
+                    android:layout_height="44dp"
+                    android:text="Volver / Cancelar"
+                    android:backgroundTint="@color/secondary"
+                    android:textColor="@color/card_white" />
+
+            </LinearLayout>
 
         </LinearLayout>
-
-    </LinearLayout>
-</ScrollView>
+    </ScrollView>
+</LinearLayout>

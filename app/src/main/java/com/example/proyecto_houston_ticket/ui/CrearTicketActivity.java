@@ -11,6 +11,7 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import com.example.proyecto_houston_ticket.R;
 import com.example.proyecto_houston_ticket.servicio.TicketService;
@@ -20,7 +21,6 @@ import java.util.concurrent.Executors;
 
 /**
  * Pantalla para la creación de un nuevo ticket de incidencia.
- * Realiza la validación de campos obligatorios en el cliente antes del envío.
  */
 public class CrearTicketActivity extends AppCompatActivity {
 
@@ -29,6 +29,7 @@ public class CrearTicketActivity extends AppCompatActivity {
     private Spinner spinnerCategoria;
     private Spinner spinnerPrioridad;
     private Button btnGuardar;
+    private Button btnCancelar;
 
     private TicketService ticketService;
     private ExecutorService executorService;
@@ -39,6 +40,14 @@ public class CrearTicketActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_crear_ticket);
 
+        Toolbar toolbar = findViewById(R.id.toolbarCrear);
+        if (toolbar != null) {
+            setSupportActionBar(toolbar);
+            if (getSupportActionBar() != null) {
+                getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            }
+        }
+
         ticketService = new TicketService(this);
         executorService = Executors.newSingleThreadExecutor();
         mainHandler = new Handler(Looper.getMainLooper());
@@ -48,18 +57,24 @@ public class CrearTicketActivity extends AppCompatActivity {
         spinnerCategoria = findViewById(R.id.spinnerCategoria);
         spinnerPrioridad = findViewById(R.id.spinnerPrioridad);
         btnGuardar = findViewById(R.id.btnGuardarTicket);
+        btnCancelar = findViewById(R.id.btnCancelarCrear);
 
-        // Configurar opciones de Categorías
         String[] categorias = {"Software", "Hardware", "Redes", "Accesos / Permisos", "Otros"};
         ArrayAdapter<String> adapterCat = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, categorias);
         spinnerCategoria.setAdapter(adapterCat);
 
-        // Configurar opciones de Prioridades
         String[] prioridades = {"Baja", "Media", "Alta"};
         ArrayAdapter<String> adapterPrio = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, prioridades);
         spinnerPrioridad.setAdapter(adapterPrio);
 
         btnGuardar.setOnClickListener(v -> guardarTicket());
+        btnCancelar.setOnClickListener(v -> finish());
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        finish();
+        return true;
     }
 
     private void guardarTicket() {
@@ -68,7 +83,6 @@ public class CrearTicketActivity extends AppCompatActivity {
         String categoria = spinnerCategoria.getSelectedItem() != null ? spinnerCategoria.getSelectedItem().toString() : "";
         String prioridad = spinnerPrioridad.getSelectedItem() != null ? spinnerPrioridad.getSelectedItem().toString() : "";
 
-        // Validaciones en cliente
         boolean hayError = false;
 
         if (titulo.isEmpty()) {
@@ -97,7 +111,6 @@ public class CrearTicketActivity extends AppCompatActivity {
 
         btnGuardar.setEnabled(false);
 
-        // Ejecutar inserción/petición en segundo hilo
         executorService.execute(() -> {
             StringBuilder errorOut = new StringBuilder();
             long idInsertado = ticketService.crearTicket(titulo, descripcion, categoria, prioridad, usuarioId, errorOut);

@@ -25,8 +25,8 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 /**
- * Pantalla principal del rol CLIENTE (Sprint 2).
- * Muestra el listado de tickets propios y permite crear e inspeccionar el detalle de cada ticket.
+ * Pantalla principal del rol CLIENTE (Sprint 3).
+ * Muestra el listado de sus propios tickets con recarga automática en onResume().
  */
 public class ClienteActivity extends AppCompatActivity {
 
@@ -41,7 +41,6 @@ public class ClienteActivity extends AppCompatActivity {
     private Handler mainHandler;
     private long usuarioId;
 
-    // Launcher para refrescar la lista tras crear un nuevo ticket
     private final ActivityResultLauncher<Intent> crearTicketLauncher =
             registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
                 if (result.getResultCode() == RESULT_OK) {
@@ -86,7 +85,11 @@ public class ClienteActivity extends AppCompatActivity {
             startActivity(intent);
             finish();
         });
+    }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
         cargarTickets();
     }
 

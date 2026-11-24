@@ -1,146 +1,290 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Layout para la visualizacion detallada de un ticket -->
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<!-- Layout para la visualizacion, asignacion, comentarios y gestion de un ticket -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fillViewport="true"
+    android:orientation="vertical"
     android:background="@color/bg_light">
 
-    <LinearLayout
+    <!-- Toolbar superior con boton de retroceso -->
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbarDetalle"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="24dp">
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/primary"
+        app:title="Detalle de Incidencia"
+        app:titleTextColor="@color/card_white" />
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Detalle de Incidencia"
-            android:textColor="@color/primary"
-            android:textSize="22sp"
-            android:textStyle="bold"
-            android:gravity="center"
-            android:layout_marginBottom="20dp" />
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
 
-        <!-- Tarjeta del ticket -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:background="@color/card_white"
-            android:padding="20dp"
-            android:elevation="4dp">
+            android:padding="16dp">
 
-            <!-- ID y Estado -->
+            <!-- Tarjeta con los datos del ticket -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginBottom="12dp">
+                android:orientation="vertical"
+                android:background="@color/card_white"
+                android:padding="20dp"
+                android:elevation="4dp"
+                android:layout_marginBottom="16dp">
 
-                <TextView
-                    android:id="@+id/tvDetalleId"
-                    android:layout_width="0dp"
+                <!-- ID y Estado -->
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Ticket #--"
-                    android:textColor="@color/text_muted"
-                    android:textSize="14sp"
-                    android:textStyle="bold" />
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="12dp">
 
+                    <TextView
+                        android:id="@+id/tvDetalleId"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Ticket #--"
+                        android:textColor="@color/text_muted"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/tvDetalleEstado"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="ABIERTO"
+                        android:textColor="@color/primary"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <!-- Titulo -->
                 <TextView
-                    android:id="@+id/tvDetalleEstado"
-                    android:layout_width="wrap_content"
+                    android:id="@+id/tvDetalleTitulo"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="ABIERTO"
-                    android:textColor="@color/primary"
-                    android:textSize="14sp"
-                    android:textStyle="bold" />
-            </LinearLayout>
-
-            <!-- Titulo del Ticket -->
-            <TextView
-                android:id="@+id/tvDetalleTitulo"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Título del ticket"
-                android:textColor="@color/text_main"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                android:layout_marginBottom="16dp" />
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@color/border_gray"
-                android:layout_marginBottom="16dp" />
-
-            <!-- Categoria y Prioridad -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginBottom="12dp">
-
-                <TextView
-                    android:id="@+id/tvDetalleCategoria"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Categoría: Software"
+                    android:text="Título del ticket"
                     android:textColor="@color/text_main"
-                    android:textSize="14sp" />
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="16dp" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/border_gray"
+                    android:layout_marginBottom="16dp" />
+
+                <!-- Categoria, Prioridad y Técnico -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="8dp">
+
+                    <TextView
+                        android:id="@+id/tvDetalleCategoria"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Categoría: --"
+                        android:textColor="@color/text_main"
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:id="@+id/tvDetallePrioridad"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Prioridad: --"
+                        android:textColor="@color/error_red"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
 
                 <TextView
-                    android:id="@+id/tvDetallePrioridad"
-                    android:layout_width="wrap_content"
+                    android:id="@+id/tvDetalleTecnico"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Prioridad: Alta"
-                    android:textColor="@color/error_red"
+                    android:text="Técnico asignado: Sin asignar"
+                    android:textColor="@color/text_muted"
+                    android:textSize="13sp"
+                    android:layout_marginBottom="8dp" />
+
+                <TextView
+                    android:id="@+id/tvDetalleFecha"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Creado el: --/--/----"
+                    android:textColor="@color/text_muted"
+                    android:textSize="13sp"
+                    android:layout_marginBottom="16dp" />
+
+                <!-- Descripcion -->
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Descripción:"
+                    android:textColor="@color/text_main"
                     android:textSize="14sp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    android:layout_marginBottom="6dp" />
+
+                <TextView
+                    android:id="@+id/tvDetalleDescripcion"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Descripción completa..."
+                    android:textColor="@color/text_main"
+                    android:textSize="15sp"
+                    android:lineSpacingExtra="4dp"
+                    android:layout_marginBottom="20dp" />
+
+                <!-- Seccion Asignacion de Tecnico (Solo para Administrador) -->
+                <LinearLayout
+                    android:id="@+id/layoutAsignarTecnico"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:visibility="gone"
+                    android:layout_marginBottom="16dp">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Asignar Técnico Responsable:"
+                        android:textColor="@color/text_main"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        android:layout_marginBottom="4dp" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <Spinner
+                            android:id="@+id/spinnerTecnicos"
+                            android:layout_width="0dp"
+                            android:layout_height="44dp"
+                            android:layout_weight="1"
+                            android:background="@android:drawable/btn_dropdown" />
+
+                        <Button
+                            android:id="@+id/btnAsignarTecnico"
+                            android:layout_width="wrap_content"
+                            android:layout_height="44dp"
+                            android:text="Asignar"
+                            android:backgroundTint="@color/primary"
+                            android:textColor="@color/card_white"
+                            android:layout_marginStart="8dp" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <!-- Boton Avanzar Estado -->
+                <Button
+                    android:id="@+id/btnAvanzarEstado"
+                    android:layout_width="match_parent"
+                    android:layout_height="44dp"
+                    android:text="Pasar a En curso"
+                    android:backgroundTint="@color/success_green"
+                    android:textColor="@color/card_white"
+                    android:visibility="gone"
+                    android:layout_marginBottom="12dp" />
+
+                <!-- Boton Editar Ticket -->
+                <Button
+                    android:id="@+id/btnEditarTicket"
+                    android:layout_width="match_parent"
+                    android:layout_height="44dp"
+                    android:text="Editar Ticket"
+                    android:backgroundTint="@color/primary"
+                    android:textColor="@color/card_white"
+                    android:visibility="gone"
+                    android:layout_marginBottom="12dp" />
+
+                <!-- Boton Eliminar Ticket (Solo en estado Resuelto / Cerrado) -->
+                <Button
+                    android:id="@+id/btnEliminarTicket"
+                    android:layout_width="match_parent"
+                    android:layout_height="44dp"
+                    android:text="Eliminar Ticket"
+                    android:backgroundTint="@color/error_red"
+                    android:textColor="@color/card_white"
+                    android:visibility="gone" />
+
             </LinearLayout>
 
-            <!-- Fecha de Creacion -->
-            <TextView
-                android:id="@+id/tvDetalleFecha"
+            <!-- Tarjeta de Comentarios / Seguimiento -->
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Creado el: --/--/----"
-                android:textColor="@color/text_muted"
-                android:textSize="13sp"
-                android:layout_marginBottom="16dp" />
+                android:orientation="vertical"
+                android:background="@color/card_white"
+                android:padding="20dp"
+                android:elevation="4dp">
 
-            <!-- Descripcion -->
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Descripción:"
-                android:textColor="@color/text_main"
-                android:textSize="14sp"
-                android:textStyle="bold"
-                android:layout_marginBottom="6dp" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Comentarios y Seguimiento"
+                    android:textColor="@color/primary"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="12dp" />
 
-            <TextView
-                android:id="@+id/tvDetalleDescripcion"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Descripción completa de la incidencia reportada por el usuario..."
-                android:textColor="@color/text_main"
-                android:textSize="15sp"
-                android:lineSpacingExtra="4dp"
-                android:layout_marginBottom="24dp" />
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvComentarios"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:nestedScrollingEnabled="false"
+                    android:layout_marginBottom="16dp" />
 
-            <!-- Boton Volver -->
-            <Button
-                android:id="@+id/btnVolver"
-                android:layout_width="match_parent"
-                android:layout_height="44dp"
-                android:text="Volver a la Lista"
-                android:backgroundTint="@color/secondary"
-                android:textColor="@color/card_white" />
+                <TextView
+                    android:id="@+id/tvSinComentarios"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Aún no hay comentarios en este ticket."
+                    android:textColor="@color/text_muted"
+                    android:textSize="13sp"
+                    android:gravity="center"
+                    android:padding="12dp"
+                    android:visibility="gone" />
+
+                <!-- Escribir comentario -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+
+                    <EditText
+                        android:id="@+id/etNuevoComentario"
+                        android:layout_width="0dp"
+                        android:layout_height="44dp"
+                        android:layout_weight="1"
+                        android:hint="Escribe un comentario..."
+                        android:inputType="textCapSentences"
+                        android:background="@android:drawable/edit_text"
+                        android:paddingHorizontal="12dp" />
+
+                    <Button
+                        android:id="@+id/btnEnviarComentario"
+                        android:layout_width="wrap_content"
+                        android:layout_height="44dp"
+                        android:text="Enviar"
+                        android:backgroundTint="@color/primary"
+                        android:textColor="@color/card_white"
+                        android:layout_marginStart="8dp" />
+                </LinearLayout>
+
+            </LinearLayout>
 
         </LinearLayout>
-
-    </LinearLayout>
-</ScrollView>
+    </ScrollView>
+</LinearLayout>
